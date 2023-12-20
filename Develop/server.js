@@ -45,3 +45,19 @@ app.get('/notes', (req, res) => {
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });
+
+  app.delete('/api/notes/:id', (req, res) => {
+    const noteId = req.params.id;
+  
+    fs.readFile(path.join(__dirname, 'db/db.json'), 'utf8', (err, data) => {
+      if (err) throw err;
+      let notes = JSON.parse(data);
+      notes = notes.filter((note) => note.id !== noteId);
+  
+      fs.writeFile(path.join(__dirname, 'db/db.json'), JSON.stringify(notes), (err) => {
+        if (err) throw err;
+        res.json({ msg: 'Note deleted' });
+      });
+    });
+  });
+  
