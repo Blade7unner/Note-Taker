@@ -25,7 +25,6 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
-
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -39,6 +38,7 @@ const getNotes = () =>
     }
     return response.json();
   })
+  .then(data => renderNoteList(data))
   .catch(error => {
     console.error('Error fetching notes:', error);
   });
@@ -50,6 +50,12 @@ const saveNote = (note) =>
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+    return response.json();
   });
 
 const deleteNote = (id) =>
@@ -58,6 +64,12 @@ const deleteNote = (id) =>
     headers: {
       'Content-Type': 'application/json',
     },
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+    return response.json();
   });
 
 const renderActiveNote = () => {
@@ -76,14 +88,21 @@ const renderActiveNote = () => {
   }
 };
 
+
 const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
   };
   saveNote(newNote).then(() => {
-    getAndRenderNotes();
+    return getNotes();
+  })
+  .then(renderNoteList)
+  .then(() => {
     renderActiveNote();
+  })
+  .catch(error => {
+    console.error('Error saving note:', error);
   });
 };
 
@@ -100,8 +119,14 @@ const handleNoteDelete = (e) => {
   }
 
   deleteNote(noteId).then(() => {
-    getAndRenderNotes();
+    return getNotes();
+  })
+  .then(renderNoteList)
+  .then(() => {
     renderActiveNote();
+  })
+  .catch(error => {
+    console.error('Error deleting note:', error);
   });
 };
 
