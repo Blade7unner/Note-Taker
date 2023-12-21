@@ -27,7 +27,7 @@ To run the Note Taker, you need Node.js installed on your system. Download Node.
 
 ## Deployment
 
-The application is deployed on Heroku, making it accessible from anywhere. Check out the live version here: [Note Taker on Heroku](https://pure-waters-03227-e9fa0ef8c4e5.herokuapp.com/).
+The application is deployed on Heroku, making it accessible from anywhere. Check out the live version here: [Note Taker on Heroku](https://murmuring-fortress-56592-31a3cba14dc9.herokuapp.com/).
 
 
 
